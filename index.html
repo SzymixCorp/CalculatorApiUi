@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>MyApi</title>
+</head>
+<body>
+    <button id="btnGetAll">Get all data</button><br>
+    <input type="text" id="operacja">
+    <button id="calculate">Oblicz</button>
+    <p id="resault"></p>
+    <div class="allResaults"></div>
+    
+</body>
+<script type="text/javascript">
+    let newId = 3;
+    $(document).ready(function () {
+        $("#btnGetAll").click(function () {
+            fetch("https://localhost:44339/api/Notes")
+                .then(res=> {
+                    return res.json();
+                    
+                })
+                .then(data=>{
+                    document.querySelector(".allResaults").innerHTML = "";
+                    data.forEach(element => {
+                        
+                        document.getElementById("resault").innerHTML = "";
+                        var div = document.createElement('div');
+                        div.className = element.id;
+                        div.innerHTML = element.operation + " = " + element.result;
+                    
+                        document.querySelector(".allResaults").appendChild(div);
+                        //element.operation + " = " + element.result
+                    });
+                    
+                })
+                .catch(error=>console.log(error));
+        });
+        $("#calculate").click(function () {
+            fetch("https://localhost:44339/api/Notes", {
+                method: "POST",
+                headers:{
+                    "Content-Type" : "application/json"
+                },
+                body : JSON.stringify({
+                    id : newId.toString(),
+                    "operation" : document.getElementById("operacja").value,
+                    "result": "gg",
+                })
+            })
+                .then(res=> {
+                    return res.json();
+                })
+                .then(data=>{
+                    newId++;
+                    document.getElementById("resault").innerHTML = "";
+                    document.getElementById("resault").innerHTML = data["result"];
+                })
+                .catch(error=>console.log(error));
+        })
+    })
+</script>
+</html>
