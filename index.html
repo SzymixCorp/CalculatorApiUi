@@ -16,6 +16,7 @@
     <br><br>
     <input type="text" id="idOfGet">
     <button id="getById">Get elem by id</button><br>
+    <p id="resultbyid"></p>
     <input type="text" id="deleteId">
     <button id="deleteButton">Delete by id</button>
     
@@ -62,7 +63,9 @@
                 .then(res=> {
                     return res.json();
                 })
-                .then(data=>console.log(data))
+                .then(data=>{
+                    document.getElementById("resultbyid").innerHTML = data['operation'] + " = " + data['result'];
+                })
                 .catch(error=>console.log(error));
         });
         $("#calculate").click(function () {
