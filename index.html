@@ -13,6 +13,9 @@
     <button id="calculate">Oblicz</button>
     <p id="resault"></p>
     <div class="allResaults"></div>
+    <br><br>
+    <input type="text" id="deleteId">
+    <button id="deleteButton">Delete by id</button>
     
 </body>
 <script type="text/javascript">
@@ -61,7 +64,23 @@
                     document.getElementById("resault").innerHTML = data["result"];
                 })
                 .catch(error=>console.log(error));
+        });
+        $("#deleteButton").click(function () {
+            fetch("https://localhost:44339/api/Notes/id?id=" + document.getElementById("deleteId").value, {
+                method: "DELETE",
+                headers:{
+                    "Content-Type" : "application/json"
+                },
+            })
+                .then(res=> {
+                    return res.json();
+                })
+                .then(data=>{
+                    console.log("Deleted: "+document.getElementById("deleteId").value)
+                })
+                .catch(error=>console.log(error));
         })
+
     })
 </script>
 </html>
