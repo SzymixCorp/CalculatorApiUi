@@ -46,7 +46,7 @@
                 .catch(error=>console.log(error));
         });
         $("#getById").click(function () {
-            fetch("https://localhost:44339/api/Notes/id?id=" + element.getElementById("idOfGet").value)
+            fetch("https://localhost:44339/api/Notes/id?id=" + document.getElementById("idOfGet").value)
                 .then(res=> {
                     return res.json();
                 })
