@@ -19,11 +19,11 @@
     <p id="resultbyid"></p>
     <input type="text" id="deleteId">
     <button id="deleteButton">Delete by id</button>
+    <p id="deleted"></p>
     
 </body>
 <script type="text/javascript">
     // document.getElementById("oneOfResult").addEventListener("click", coppyIdToCLickboard)
-
     $(".allResults").click(function(e){
         var clickElement = e.target;  // get the dom element clicked.
         var elementClassName = e.target.className;  // get the classname of the element clicked
@@ -36,7 +36,7 @@
     let newId = 3;
     $(document).ready(function () {
         $("#btnGetAll").click(function () {
-            fetch("https://localhost:44339/api/Notes")
+            fetch("https://localhost:44339/api/Calcs")
                 .then(res=> {
                     return res.json();
                     
@@ -59,17 +59,18 @@
                 .catch(error=>console.log(error));
         });
         $("#getById").click(function () {
-            fetch("https://localhost:44339/api/Notes/id?id=" + document.getElementById("idOfGet").value)
+            fetch("https://localhost:44339/api/Calcs/id?id=" + document.getElementById("idOfGet").value)
                 .then(res=> {
                     return res.json();
                 })
                 .then(data=>{
                     document.getElementById("resultbyid").innerHTML = data['operation'] + " = " + data['result'];
+                    document.getElementById("idOfGet").value = "";
                 })
                 .catch(error=>console.log(error));
         });
         $("#calculate").click(function () {
-            fetch("https://localhost:44339/api/Notes", {
+            fetch("https://localhost:44339/api/Calcs", {
                 method: "POST",
                 headers:{
                     "Content-Type" : "application/json"
@@ -80,32 +81,35 @@
                     "result": "gg",
                 })
             })
-                .then(res=> {
-                    return res.json();
-                })
                 .then(data=>{
-                    newId++;
-                    document.getElementById("result").innerHTML = "";
-                    document.getElementById("result").innerHTML = data["result"];
+                    if((data["result"] == error)||(data["result"] == "Nie dzielimy przez 0")||(data["result"] == "Duża liczba")){
+                        return error;
+                    }
+                    else{
+                        newId++;
+                        document.getElementById("result").innerHTML = "";
+                        document.getElementById("result").innerHTML = data["result"];
+                        document.getElementById("operacja").innerHTML = "";
+                    }
+                    
                 })
                 .catch(error=>console.log(error));
         });
         $("#deleteButton").click(function () {
-            fetch("https://localhost:44339/api/Notes/id?id=" + document.getElementById("deleteId").value, {
+            fetch("https://localhost:44339/api/Calcs/id?id=" + document.getElementById("deleteId").value, {
                 method: "DELETE",
                 headers:{
                     "Content-Type" : "application/json"
                 },
             })
-                .then(res=> {
-                    return res.json();
-                })
                 .then(data=>{
-                    console.log("Deleted: "+document.getElementById("deleteId").value)
+                    document.getElementById("deleted").innerHTML = "Done";
+                    document.getElementById("deleteId").value = "";
                 })
                 .catch(error=>console.log(error));
         })
 
     })
+    
 </script>
 </html>
